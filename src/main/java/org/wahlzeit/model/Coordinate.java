@@ -18,8 +18,10 @@ public class Coordinate {
         return isEqual(coordinate);
     }
 
+    //true if Euclidean distance is below 0.001
     public boolean isEqual(Coordinate coordinate) {
-        return coordinate.getX() == this.x && coordinate.getY() == this.y && coordinate.getZ() == this.z;
+        if (coordinate == null) return false;
+        return this.getDistance(coordinate) < 0.001;
     }
 
     public double getX() {
