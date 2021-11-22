@@ -162,7 +162,7 @@ public class Photo extends DataObject {
 		Object y = rset.getObject("y_coordinate");
 		Object z = rset.getObject("z_coordinate");
 		if (x != null && y != null && z != null) {
-			loc = new Location(new Coordinate((double) x, (double) y, (double) z));
+			loc = new Location(new CartesianCoordinate((double) x, (double) y, (double) z));
 		}
 	}
 	

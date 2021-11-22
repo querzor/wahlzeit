@@ -7,7 +7,7 @@ public class LocationTest {
 
     @Test
     public void instantiateLocation() {
-        Coordinate coordinate = new Coordinate(1.0, -1.0, 1.0);
+        CartesianCoordinate coordinate = new CartesianCoordinate(1.0, -1.0, 1.0);
         Location location = new Location(coordinate);
         Assert.assertEquals(location.coordinate, coordinate);
     }
