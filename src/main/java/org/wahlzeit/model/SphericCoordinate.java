@@ -1,5 +1,7 @@
 package org.wahlzeit.model;
 
+import java.util.zip.CRC32C;
+
 public class SphericCoordinate extends AbstractCoordinate {
 
     /*
@@ -58,5 +60,14 @@ public class SphericCoordinate extends AbstractCoordinate {
     @Override
     public SphericCoordinate asSphericCoordinate() {
         return this;
+    }
+
+    @Override
+    public int hashCode() {
+        CRC32C hash = new CRC32C();
+        hash.update(Double.hashCode(phi));
+        hash.update(Double.hashCode(theta));
+        hash.update(Double.hashCode(radius));
+        return (int) hash.getValue();
     }
 }

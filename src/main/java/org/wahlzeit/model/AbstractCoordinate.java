@@ -1,6 +1,8 @@
 package org.wahlzeit.model;
 
-public abstract class AbstractCoordinate implements Coordinate{
+import java.util.zip.CRC32C;
+
+public abstract class AbstractCoordinate implements Coordinate {
 
     //coordinates are assumed to be equal, if their distance Cartesian distance is smaller than 0.001
     public boolean isEqual(Coordinate coordinate) {
@@ -32,4 +34,7 @@ public abstract class AbstractCoordinate implements Coordinate{
 
         return Math.acos(Math.cos(phi1) * Math.cos(phi2) + -Math.sin(phi1) * -Math.sin(phi2) * Math.cos(deltaTheta));
     }
+
+    @Override
+    public abstract int hashCode();
 }
