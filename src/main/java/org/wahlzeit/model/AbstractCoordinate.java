@@ -26,12 +26,10 @@ public abstract class AbstractCoordinate implements Coordinate{
     public double getCentralAngle(Coordinate coordinate) {
         SphericCoordinate coordinate1 = this.asSphericCoordinate();
         SphericCoordinate coordinate2 = coordinate.asSphericCoordinate();
-        //phi1 and phi2 converted spherical latitude
-        double phi1 = coordinate1.getPhi() - Math.PI/2;
-        double phi2 = coordinate2.getPhi() - Math.PI/2;
+        double phi1 = coordinate1.getPhi();
+        double phi2 = coordinate2.getPhi();
         double deltaTheta = Math.abs(coordinate1.getTheta() - coordinate2.getTheta());
 
-        return Math.acos(Math.sin(phi1) * Math.sin(phi2) + Math.cos(phi1) * Math.cos(phi2) * Math.cos(deltaTheta));
+        return Math.acos(Math.cos(phi1) * Math.cos(phi2) + -Math.sin(phi1) * -Math.sin(phi2) * Math.cos(deltaTheta));
     }
-
 }
