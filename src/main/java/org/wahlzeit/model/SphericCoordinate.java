@@ -1,9 +1,21 @@
 package org.wahlzeit.model;
 
-public class SphericCoordinate extends AbstractCoordinate{
-    private final double phi;
-    private final double theta;
-    private final double radius;
+public class SphericCoordinate extends AbstractCoordinate {
+
+    /*
+    phi represents latitude; phi=0 points toward the north pole
+    double represents longitude
+    radius represents radial distance
+     */
+
+    private final double phi, theta, radius;
+
+    /**
+     * @param phi    latitude
+     * @param theta  longitude
+     * @param radius radial distance
+     * @methodtype constructor
+     */
 
     public SphericCoordinate(double phi, double theta, double radius) {
         this.phi = phi;
@@ -11,13 +23,25 @@ public class SphericCoordinate extends AbstractCoordinate{
         this.radius = radius;
     }
 
+    /**
+     * @methodtype get
+     */
+
     public double getPhi() {
         return phi;
     }
 
+    /**
+     * @methodtype get
+     */
+
     public double getTheta() {
         return theta;
     }
+
+    /**
+     * @methodtype get
+     */
 
     public double getRadius() {
         return radius;
@@ -25,25 +49,14 @@ public class SphericCoordinate extends AbstractCoordinate{
 
     @Override
     public CartesianCoordinate asCartesianCoordinate() {
-        double x = radius * Math.cos(phi) * Math.sin(theta);
+        double x = radius * Math.sin(phi) * Math.cos(theta);
         double y = radius * Math.sin(phi) * Math.sin(theta);
-        double z = radius * Math.cos(theta);
+        double z = radius * Math.cos(phi);
         return new CartesianCoordinate(x, y, z);
-    }
-
-    @Override
-    public double getCartesianDistance(Coordinate coordinate) {
-        return this.asCartesianCoordinate().getCartesianDistance(coordinate.asCartesianCoordinate());
     }
 
     @Override
     public SphericCoordinate asSphericCoordinate() {
         return this;
     }
-
-    @Override
-    public double getCentralAngle(Coordinate coordinate) {
-        return 0;
-    }
-
 }

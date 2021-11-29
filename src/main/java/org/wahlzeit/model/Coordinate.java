@@ -10,4 +10,6 @@ public interface Coordinate {
     double getCentralAngle(Coordinate coordinate);
 
     boolean isEqual(Coordinate coordinate);
+
+    boolean equals(Coordinate coordinate);
 }
