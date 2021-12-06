@@ -17,7 +17,7 @@ import org.wahlzeit.utils.*;
 public class Photo extends DataObject {
 
 	/**
-	 * 
+	 *
 	 */
 	public static final String IMAGE = "image";
 	public static final String THUMB = "thumb";
@@ -33,59 +33,59 @@ public class Photo extends DataObject {
 	public static final String STATUS = "status";
 	public static final String IS_INVISIBLE = "isInvisible";
 	public static final String UPLOADED_ON = "uploadedOn";
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public static final int MAX_PHOTO_WIDTH = 420;
 	public static final int MAX_PHOTO_HEIGHT = 600;
 	public static final int MAX_THUMB_PHOTO_WIDTH = 105;
 	public static final int MAX_THUMB_PHOTO_HEIGHT = 150;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	protected PhotoId id = null;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	protected int ownerId = 0;
 	protected String ownerName;
 
 	/**
-	 * 
+	 *
 	 */
 	protected boolean ownerNotifyAboutPraise = false;
 	protected EmailAddress ownerEmailAddress = EmailAddress.EMPTY;
 	protected Language ownerLanguage = Language.ENGLISH;
 	protected URL ownerHomePage;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	protected int width;
 	protected int height;
 	protected PhotoSize maxPhotoSize = PhotoSize.MEDIUM; // derived
-	
+
 	/**
-	 * 
+	 *
 	 */
 	protected Tags tags = Tags.EMPTY_TAGS;
 
 	/**
-	 * 
+	 *
 	 */
 	protected PhotoStatus status = PhotoStatus.VISIBLE;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	protected int praiseSum = 10;
 	protected int noVotes = 1;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	protected long creationTime = System.currentTimeMillis();
 
@@ -93,27 +93,27 @@ public class Photo extends DataObject {
 	 *
 	 */
 	protected Location loc = null;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public Photo() {
 		id = PhotoId.getNextId();
 		incWriteCount();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype constructor
 	 */
 	public Photo(PhotoId myId) {
 		id = myId;
-		
+
 		incWriteCount();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype constructor
 	 */
 	public Photo(ResultSet rset) throws SQLException {
@@ -121,22 +121,22 @@ public class Photo extends DataObject {
 	}
 
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public String getIdAsString() {
 		return String.valueOf(id.asInt());
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void readFrom(ResultSet rset) throws SQLException {
 		id = PhotoId.getIdFromInt(rset.getInt("id"));
 
 		ownerId = rset.getInt("owner_id");
 		ownerName = rset.getString("owner_name");
-		
+
 		ownerNotifyAboutPraise = rset.getBoolean("owner_notify_about_praise");
 		ownerEmailAddress = EmailAddress.getFromString(rset.getString("owner_email_address"));
 		ownerLanguage = Language.getFromInt(rset.getInt("owner_language"));
@@ -155,19 +155,19 @@ public class Photo extends DataObject {
 
 		maxPhotoSize = PhotoSize.getFromWidthHeight(width, height);
 
-		/**
-		 * checks if coordinat is null
+		/*
+		 * checks if coordinate is null
 		 */
-		Object x = rset.getObject("x_coordinate");
-		Object y = rset.getObject("y_coordinate");
-		Object z = rset.getObject("z_coordinate");
-		if (x != null && y != null && z != null) {
-			loc = new Location(new CartesianCoordinate((double) x, (double) y, (double) z));
+		Object lat = rset.getObject("x_coordinate");
+		Object lon = rset.getObject("y_coordinate");
+		Object radius = rset.getObject("z_coordinate");
+		if (lat != null && lon != null && radius != null) {
+			loc = new Location(new SphericCoordinate((double) lat, (double) lon, (double) radius));
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void writeOn(ResultSet rset) throws SQLException {
 		rset.updateInt("id", id.asInt());
@@ -186,63 +186,63 @@ public class Photo extends DataObject {
 		rset.updateLong("creation_time", creationTime);
 
 		if (loc != null) {
-			rset.updateDouble("x_coordinate", loc.coordinate.getX());
-			rset.updateDouble("y_coordinate", loc.coordinate.getY());
-			rset.updateDouble("z_coordinate", loc.coordinate.getZ());
+			rset.updateDouble("x_coordinate", loc.coordinate.getPhi());
+			rset.updateDouble("y_coordinate", loc.coordinate.getTheta());
+			rset.updateDouble("z_coordinate", loc.coordinate.getRadius());
 		}
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void writeId(PreparedStatement stmt, int pos) throws SQLException {
 		stmt.setInt(pos, id.asInt());
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public PhotoId getId() {
 		return id;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public int getOwnerId() {
 		return ownerId;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype set
 	 */
 	public void setOwnerId(int newId) {
 		ownerId = newId;
 		incWriteCount();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public String getOwnerName() {
 		return ownerName;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype set
 	 */
 	public void setOwnerName(String newName) {
 		ownerName = newName;
 		incWriteCount();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public String getSummary(ModelConfig cfg) {
@@ -250,7 +250,7 @@ public class Photo extends DataObject {
 	}
 
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public String getCaption(ModelConfig cfg) {
@@ -258,15 +258,15 @@ public class Photo extends DataObject {
 	}
 
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public boolean getOwnerNotifyAboutPraise() {
 		return ownerNotifyAboutPraise;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype set
 	 */
 	public void setOwnerNotifyAboutPraise(boolean newNotifyAboutPraise) {
@@ -275,15 +275,15 @@ public class Photo extends DataObject {
 	}
 
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public EmailAddress getOwnerEmailAddress() {
 		return ownerEmailAddress;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype set
 	 */
 	public void setOwnerEmailAddress(EmailAddress newEmailAddress) {
@@ -292,14 +292,14 @@ public class Photo extends DataObject {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public Language getOwnerLanguage() {
 		return ownerLanguage;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void setOwnerLanguage(Language newLanguage) {
 		ownerLanguage = newLanguage;
@@ -307,24 +307,24 @@ public class Photo extends DataObject {
 	}
 
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public URL getOwnerHomePage() {
 		return ownerHomePage;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype set
 	 */
 	public void setOwnerHomePage(URL newHomePage) {
 		ownerHomePage = newHomePage;
 		incWriteCount();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype boolean-query
 	 */
 	public boolean hasSameOwner(Photo photo) {
@@ -332,47 +332,47 @@ public class Photo extends DataObject {
 	}
 
 	/**
-	 * 
+	 *
 	 * @methodtype boolean-query
 	 */
 	public boolean isWiderThanHigher() {
 		return (height * MAX_PHOTO_WIDTH) < (width * MAX_PHOTO_HEIGHT);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public int getWidth() {
 		return width;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public int getHeight() {
 		return height;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public int getThumbWidth() {
 		return isWiderThanHigher() ? MAX_THUMB_PHOTO_WIDTH : (width * MAX_THUMB_PHOTO_HEIGHT / height);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public int getThumbHeight() {
 		return isWiderThanHigher() ? (height * MAX_THUMB_PHOTO_WIDTH / width) : MAX_THUMB_PHOTO_HEIGHT;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype set
 	 */
 	public void setWidthAndHeight(int newWidth, int newHeight) {
@@ -383,84 +383,84 @@ public class Photo extends DataObject {
 
 		incWriteCount();
 	}
-	
+
 	/**
 	 * Can this photo satisfy provided photo size?
-	 * 
+	 *
 	 * @methodtype boolean-query
 	 */
 	public boolean hasPhotoSize(PhotoSize size) {
 		return maxPhotoSize.asInt() >= size.asInt();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public PhotoSize getMaxPhotoSize() {
 		return maxPhotoSize;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public double getPraise() {
 		return (double) praiseSum / noVotes;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public String getPraiseAsString(ModelConfig cfg) {
 		return cfg.asPraiseString(getPraise());
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void addToPraise(int value) {
 		praiseSum += value;
 		noVotes += 1;
 		incWriteCount();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype boolean-query
 	 */
 	public boolean isVisible() {
 		return status.isDisplayable();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public PhotoStatus getStatus() {
 		return status;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype set
 	 */
 	public void setStatus(PhotoStatus newStatus) {
 		status = newStatus;
 		incWriteCount();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype boolean-query
 	 */
 	public boolean hasTag(String tag) {
 		return tags.hasTag(tag);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public Tags getTags() {
@@ -468,16 +468,16 @@ public class Photo extends DataObject {
 	}
 
 	/**
-	 * 
+	 *
 	 * @methodtype set
 	 */
 	public void setTags(Tags newTags) {
 		tags = newTags;
 		incWriteCount();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @methodtype get
 	 */
 	public long getCreationTime() {
