@@ -11,5 +11,7 @@ public interface Coordinate {
 
     boolean isEqual(Coordinate coordinate);
 
-    boolean equals(Coordinate coordinate);
+    boolean equals(Object o);
+
+    boolean isClose(Coordinate coordinate);
 }

@@ -56,8 +56,8 @@ public class AbstractCoordinateTest {
             CartesianCoordinate coordinate2 = coordinate1.asCartesianCoordinate();
             SphericCoordinate coordinate3 = coordinate2.asSphericCoordinate();
 
-            assertTrue(coordinate1.isEqual(coordinate2));
-            assertTrue(coordinate1.isEqual(coordinate3));
+            assertTrue(coordinate1.isClose(coordinate2));
+            assertTrue(coordinate1.isClose(coordinate3));
         }
     }
 
@@ -67,7 +67,7 @@ public class AbstractCoordinateTest {
         for (int i = 0; i < testData.length - 1; i++) {
             SphericCoordinate coordinate1 = new SphericCoordinate(testData[i][0], testData[i][1], testData[i][2]);
             SphericCoordinate coordinate2 = new SphericCoordinate(testData[i + 1][0], testData[i + 1][1], testData[i + 1][2]);
-            assertTrue(coordinate1.equals(coordinate2));
+            assertTrue(coordinate1.isClose(coordinate2));
         }
     }
 

@@ -1,16 +1,26 @@
 package org.wahlzeit.model;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
 
 public class SphericCoordinateTest {
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
+
+    @Test
+    public void invalidArguments() {
+        exception.expect(AssertionError.class);
+        SphericCoordinate coordinate1 = new SphericCoordinate(Double.POSITIVE_INFINITY, 1, 1);
+    }
 
     @Test
     public void instantiateCoordinate() {
         SphericCoordinate coordinate = new SphericCoordinate(2, 4, 5);
         assertEquals(2, coordinate.getPhi(), 0);
-        assertEquals(4, coordinate.getTheta(), 0);
+        assertEquals(-2.2831853071795862, coordinate.getTheta(), 0);
         assertEquals(5, coordinate.getRadius(), 0);
     }
 
@@ -19,7 +29,7 @@ public class SphericCoordinateTest {
         SphericCoordinate coordinate1 = new SphericCoordinate(2, 5, 10);
         SphericCoordinate coordinate2 = coordinate1.asSphericCoordinate();
         assertEquals(2, coordinate2.getPhi(), 0);
-        assertEquals(5, coordinate2.getTheta(), 0);
+        assertEquals(-1.2831853071795862, coordinate2.getTheta(), 0);
         assertEquals(10, coordinate2.getRadius(), 0);
     }
 

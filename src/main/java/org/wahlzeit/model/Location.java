@@ -1,10 +1,10 @@
 package org.wahlzeit.model;
 
 public class Location {
-    CartesianCoordinate coordinate;
+    SphericCoordinate coordinate;
 
-    public Location(CartesianCoordinate coordinate) {
-        this.coordinate = coordinate;
+    public Location(Coordinate coordinate) {
+        this.coordinate = coordinate.asSphericCoordinate();
     }
 
     public boolean equals(Location location) {
@@ -12,11 +12,11 @@ public class Location {
         return this.coordinate.equals(location.coordinate);
     }
 
-    public CartesianCoordinate getCoordinate() {
+    public SphericCoordinate getCoordinate() {
         return coordinate;
     }
 
-    public void setCoordinate(CartesianCoordinate coordinate) {
+    public void setCoordinate(SphericCoordinate coordinate) {
         this.coordinate = coordinate;
     }
 }

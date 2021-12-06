@@ -6,9 +6,10 @@ import org.junit.Test;
 public class LocationTest {
 
     @Test
-    public void instantiateLocation() {
-        CartesianCoordinate coordinate = new CartesianCoordinate(1.0, -1.0, 1.0);
-        Location location = new Location(coordinate);
-        Assert.assertEquals(location.coordinate, coordinate);
+    public void instantiate() {
+        CartesianCoordinate coordinate1 = new CartesianCoordinate(1, 1, 1);
+        SphericCoordinate coordinate2 = new SphericCoordinate(Math.PI, Math.PI/2, 40000);
+        Location location1 = new Location(coordinate1);
+        Location location2 = new Location(coordinate2);
     }
 }

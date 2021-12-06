@@ -1,23 +1,51 @@
 package org.wahlzeit.model;
 
-import java.util.zip.CRC32C;
-
 public abstract class AbstractCoordinate implements Coordinate {
 
-    //coordinates are assumed to be equal, if their distance Cartesian distance is smaller than 0.001
     public boolean isEqual(Coordinate coordinate) {
         if (coordinate == null) return false;
-        return getCartesianDistance(coordinate) < 0.001;
+        SphericCoordinate coordinate1 = this.asSphericCoordinate();
+        SphericCoordinate coordinate2 = coordinate.asSphericCoordinate();
+
+        if (Double.compare(Math.round(coordinate1.getPhi() * 100) / 100.0, Math.round(coordinate2.getPhi() * 100) / 100.0) != 0)
+            return false;
+        if (Double.compare(Math.round(coordinate1.getTheta() * 100) / 100.0, Math.round(coordinate2.getTheta() * 100) / 100.0) != 0)
+            return false;
+        return Double.compare(Math.round(coordinate1.getRadius() * 100) / 100.0, Math.round(coordinate2.getRadius() * 100) / 100.0) == 0;
     }
 
-    public boolean equals(Coordinate coordinate) {
-        return isEqual(coordinate);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Coordinate)) return false;
+
+        return isEqual(((Coordinate) o).asSphericCoordinate());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.asSphericCoordinate().hashCode();
+    }
+
+    @Override
+    public boolean isClose(Coordinate coordinate) {
+        if (coordinate == null) return false;
+        CartesianCoordinate coordinate1 = this.asCartesianCoordinate();
+        CartesianCoordinate coordinate2 = this.asCartesianCoordinate();
+        return coordinate1.getCartesianDistance(coordinate2) < 0.001;
     }
 
     public double getCartesianDistance(Coordinate coordinate) {
         CartesianCoordinate coordinate1 = this.asCartesianCoordinate();
         CartesianCoordinate coordinate2 = coordinate.asCartesianCoordinate();
-        return Math.sqrt(Math.pow(coordinate1.getX() - coordinate2.getX(), 2) + Math.pow(coordinate1.getY() - coordinate2.getY(), 2) + Math.pow(coordinate1.getZ() - coordinate2.getZ(), 2));
+        double distance = Math.sqrt(Math.pow(coordinate1.getX() - coordinate2.getX(), 2) + Math.pow(coordinate1.getY() - coordinate2.getY(), 2) + Math.pow(coordinate1.getZ() - coordinate2.getZ(), 2));
+
+        /*
+         * postconditions
+         */
+        assert !Double.isNaN(distance) && Double.isFinite(distance) && distance >= 0;
+
+        return distance;
     }
 
     /**
@@ -32,9 +60,11 @@ public abstract class AbstractCoordinate implements Coordinate {
         double phi2 = coordinate2.getPhi();
         double deltaTheta = Math.abs(coordinate1.getTheta() - coordinate2.getTheta());
 
-        return Math.acos(Math.cos(phi1) * Math.cos(phi2) + -Math.sin(phi1) * -Math.sin(phi2) * Math.cos(deltaTheta));
+        double centralAngle = Math.acos(Math.cos(phi1) * Math.cos(phi2) + -Math.sin(phi1) * -Math.sin(phi2) * Math.cos(deltaTheta));
+
+        assert !Double.isNaN(centralAngle) && Double.isFinite(centralAngle) && centralAngle <= 2 * Math.PI && centralAngle >= 0;
+
+        return centralAngle;
     }
 
-    @Override
-    public abstract int hashCode();
 }
