@@ -43,7 +43,7 @@ public abstract class AbstractCoordinate implements Coordinate {
         /*
          * postconditions
          */
-        assert !Double.isNaN(distance) && Double.isFinite(distance) && distance >= 0;
+        assertValidDouble(distance);
 
         return distance;
     }
@@ -62,9 +62,13 @@ public abstract class AbstractCoordinate implements Coordinate {
 
         double centralAngle = Math.acos(Math.cos(phi1) * Math.cos(phi2) + -Math.sin(phi1) * -Math.sin(phi2) * Math.cos(deltaTheta));
 
-        assert !Double.isNaN(centralAngle) && Double.isFinite(centralAngle) && centralAngle <= 2 * Math.PI && centralAngle >= 0;
+        assertValidDouble(centralAngle);
 
         return centralAngle;
+    }
+
+    protected void assertValidDouble(double d) {
+        if (!Double.isFinite(d)) throw new IllegalArgumentException("Argument is NaN or Infinity");
     }
 
 }

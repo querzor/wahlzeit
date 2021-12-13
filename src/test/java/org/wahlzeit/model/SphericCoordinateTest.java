@@ -10,9 +10,12 @@ public class SphericCoordinateTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
+    /**
+     * tests the precondition of the constructor
+     */
     @Test
     public void invalidArguments() {
-        exception.expect(AssertionError.class);
+        exception.expect(java.lang.IllegalArgumentException.class);
         SphericCoordinate coordinate1 = new SphericCoordinate(Double.POSITIVE_INFINITY, 1, 1);
     }
 

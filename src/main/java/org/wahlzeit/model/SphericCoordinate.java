@@ -23,9 +23,9 @@ public class SphericCoordinate extends AbstractCoordinate {
         /*
          * preconditions
          */
-        assert !Double.isNaN(phi) && Double.isFinite(theta);
-        assert !Double.isNaN(theta) && Double.isFinite(theta);
-        assert !Double.isNaN(radius) && Double.isFinite(radius);
+        assertValidDouble(phi);
+        assertValidDouble(theta);
+        assertValidDouble(radius);
 
         /*
         ensures that there is just one coordinate representation for each point
@@ -48,12 +48,7 @@ public class SphericCoordinate extends AbstractCoordinate {
         this.theta = theta;
         this.radius = radius;
 
-        /*
-         * postconditions
-         */
-        assert !Double.isNaN(this.phi) && Double.isFinite(this.theta);
-        assert !Double.isNaN(this.theta) && Double.isFinite(this.theta);
-        assert !Double.isNaN(this.radius) && Double.isFinite(this.radius);
+        doAssertClassInvariants();
     }
 
     /**
@@ -82,6 +77,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 
     @Override
     public CartesianCoordinate asCartesianCoordinate() {
+        doAssertClassInvariants();
         double x = radius * Math.sin(phi) * Math.cos(theta);
         double y = radius * Math.sin(phi) * Math.sin(theta);
         double z = radius * Math.cos(phi);
@@ -90,11 +86,13 @@ public class SphericCoordinate extends AbstractCoordinate {
 
     @Override
     public SphericCoordinate asSphericCoordinate() {
+        doAssertClassInvariants();
         return this;
     }
 
     @Override
     public int hashCode() {
+        doAssertClassInvariants();
         final int ACCURACY = 4;
         double phi = new BigDecimal(this.phi).setScale(ACCURACY, RoundingMode.HALF_UP).doubleValue();
         double theta = new BigDecimal(this.theta).setScale(ACCURACY, RoundingMode.HALF_UP).doubleValue();
@@ -109,5 +107,21 @@ public class SphericCoordinate extends AbstractCoordinate {
         temp = Double.doubleToLongBits(radius);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
+    }
+
+    void doAssertClassInvariants() throws IllegalStateException {
+        if (Double.isNaN(phi)) throw new IllegalStateException();
+        if (Double.isNaN(theta)) throw new IllegalStateException();
+        if (Double.isNaN(radius)) throw new IllegalStateException();
+        doAssertRange();
+    }
+
+    /*
+    makes sure the class variables are in a certain range
+     */
+    void doAssertRange() throws IllegalStateException {
+        if (phi < 0 || phi > Math.PI) throw new IllegalStateException();
+        if (theta < -Math.PI || theta > Math.PI) throw new IllegalStateException();
+        if (radius < 0) throw new IllegalStateException();
     }
 }
