@@ -7,11 +7,11 @@ import static org.junit.Assert.*;
 public class AbstractCoordinateTest {
 
     final Coordinate CartesianOrigin = new CartesianCoordinate(0, 0, 0);
-    final Coordinate SphericOrigin = new SphericCoordinate(0, 0, 0);
+    final Coordinate SphericOrigin = SphericCoordinate.getOrCreateCoordinate(0, 0, 0);
     final Coordinate cartesian1 = new CartesianCoordinate(-1, -1, 0);
     final Coordinate cartesian2 = new CartesianCoordinate(-3, -4, 1);
-    final Coordinate spheric1 = new SphericCoordinate(0, 0, 5);
-    final Coordinate spheric2 = new SphericCoordinate(Math.PI / 4, 0, 7.0710678118655);
+    final Coordinate spheric1 = SphericCoordinate.getOrCreateCoordinate(0, 0, 5);
+    final Coordinate spheric2 = SphericCoordinate.getOrCreateCoordinate(Math.PI / 4, 0, 7.0710678118655);
 
     @Test
     public void testEquals() {
@@ -19,9 +19,9 @@ public class AbstractCoordinateTest {
         Coordinate coordinate2 = new CartesianCoordinate(1, 2, 3);
         Coordinate coordinate3 = new CartesianCoordinate(1, 2, 3.1);
         //(1, 2, 3) as spherical coordinate
-        Coordinate coordinate4 = new SphericCoordinate(0.64052231267943, 1.1071487177941, 3.7416573867739);
+        Coordinate coordinate4 = SphericCoordinate.getOrCreateCoordinate(0.64052231267943, 1.1071487177941, 3.7416573867739);
         //(1, 2, 3.1) as spherical coordinate
-        Coordinate coordinate5 = new SphericCoordinate(0.62488674794732, 1.1071487177941, 3.8223029707233);
+        Coordinate coordinate5 = SphericCoordinate.getOrCreateCoordinate(0.62488674794732, 1.1071487177941, 3.8223029707233);
 
         assertTrue(coordinate1.equals(coordinate2));
         assertTrue(coordinate1.isEqual(coordinate2));
@@ -52,7 +52,7 @@ public class AbstractCoordinateTest {
     public void sphericEqualsCartesianAndItself() {
         double[][] testData = {{0, 0, 0}, {1, 2, 3}, {1, 2, -3}, {1, -2, 3}, {-1, 2, 3}, {1, -2, -3}, {-1, 2, -3}, {-1, -2, 3}, {-1, -2, -3}, {2, 0, 0}, {0, 2, 0}, {0, 0, 2}, {2, 2, 0}, {2, 0, 2}, {0, 2, 2}, {9999, 1, 1}, {1, 9999, 1}, {1, 1, 9999}};
         for (double[] toTest : testData) {
-            SphericCoordinate coordinate1 = new SphericCoordinate(toTest[0], toTest[1], toTest[2]);
+            SphericCoordinate coordinate1 = SphericCoordinate.getOrCreateCoordinate(toTest[0], toTest[1], toTest[2]);
             CartesianCoordinate coordinate2 = coordinate1.asCartesianCoordinate();
             SphericCoordinate coordinate3 = coordinate2.asSphericCoordinate();
 
@@ -65,8 +65,8 @@ public class AbstractCoordinateTest {
     public void differentSphericCoordinatesOfTheSamePoint() {
         double[][] testData = {{1, 1, 3}, {1 + 2 * Math.PI, 1, 3}, {1 - 2 * Math.PI, 1, 3}, {1 + 2 * Math.PI, 1 + 2 * Math.PI, 3}, {-1, 1 + Math.PI, 3}};
         for (int i = 0; i < testData.length - 1; i++) {
-            SphericCoordinate coordinate1 = new SphericCoordinate(testData[i][0], testData[i][1], testData[i][2]);
-            SphericCoordinate coordinate2 = new SphericCoordinate(testData[i + 1][0], testData[i + 1][1], testData[i + 1][2]);
+            SphericCoordinate coordinate1 = SphericCoordinate.getOrCreateCoordinate(testData[i][0], testData[i][1], testData[i][2]);
+            SphericCoordinate coordinate2 = SphericCoordinate.getOrCreateCoordinate(testData[i + 1][0], testData[i + 1][1], testData[i + 1][2]);
             assertTrue(coordinate1.isClose(coordinate2));
         }
     }
@@ -95,17 +95,17 @@ public class AbstractCoordinateTest {
 
     @Test
     public void centralAngle() {
-        SphericCoordinate Berlin = new SphericCoordinate(Math.toRadians(52.517) + Math.PI/2, Math.toRadians(13.40), 10);
-        SphericCoordinate Tokio = new SphericCoordinate(Math.toRadians(35.70) + Math.PI/2, Math.toRadians(139.767), 10);
+        SphericCoordinate Berlin = SphericCoordinate.getOrCreateCoordinate(Math.toRadians(52.517) + Math.PI / 2, Math.toRadians(13.40), 10);
+        SphericCoordinate Tokio = SphericCoordinate.getOrCreateCoordinate(Math.toRadians(35.70) + Math.PI / 2, Math.toRadians(139.767), 10);
         assertEquals(1.400, Berlin.getCentralAngle(Tokio), 0.001);
         assertEquals(1.400, Tokio.getCentralAngle(Berlin), 0.001);
 
         Coordinate coordinate1 = new CartesianCoordinate(1000, 0, 0).asSphericCoordinate();
         Coordinate coordinate2 = new CartesianCoordinate(0, 1000, 0).asSphericCoordinate();
         Coordinate coordinate3 = new CartesianCoordinate(0, 0, 1000).asSphericCoordinate();
-        assertEquals(Math.PI/2, coordinate1.getCentralAngle(coordinate2), 0.0001);
-        assertEquals(Math.PI/2, coordinate1.getCentralAngle(coordinate3), 0.0001);
-        assertEquals(Math.PI/2, coordinate2.getCentralAngle(coordinate3), 0.0001);
+        assertEquals(Math.PI / 2, coordinate1.getCentralAngle(coordinate2), 0.0001);
+        assertEquals(Math.PI / 2, coordinate1.getCentralAngle(coordinate3), 0.0001);
+        assertEquals(Math.PI / 2, coordinate2.getCentralAngle(coordinate3), 0.0001);
 
         Coordinate coordinate4 = new CartesianCoordinate(-5, 0, 0).asSphericCoordinate();
         Coordinate coordinate5 = new CartesianCoordinate(0, -5, 0).asSphericCoordinate();
@@ -118,8 +118,8 @@ public class AbstractCoordinateTest {
         Coordinate coordinate8 = new CartesianCoordinate(-1, -1, -1).asSphericCoordinate();
         assertEquals(Math.PI, coordinate7.getCentralAngle(coordinate8), 0.0001);
 
-        Coordinate coordinate9 = new SphericCoordinate(Math.PI/6, 0, 10);
-        Coordinate coordinate10 = new SphericCoordinate(Math.PI/2+Math.PI/6, 0, 10);
-        assertEquals(Math.PI/2, coordinate9.getCentralAngle(coordinate10), 0.0001);
+        Coordinate coordinate9 = SphericCoordinate.getOrCreateCoordinate(Math.PI / 6, 0, 10);
+        Coordinate coordinate10 = SphericCoordinate.getOrCreateCoordinate(Math.PI / 2 + Math.PI / 6, 0, 10);
+        assertEquals(Math.PI / 2, coordinate9.getCentralAngle(coordinate10), 0.0001);
     }
 }

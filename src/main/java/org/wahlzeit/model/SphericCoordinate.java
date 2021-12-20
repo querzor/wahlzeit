@@ -2,6 +2,8 @@ package org.wahlzeit.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SphericCoordinate extends AbstractCoordinate {
     /*
@@ -11,6 +13,7 @@ public class SphericCoordinate extends AbstractCoordinate {
      */
 
     private final double phi, theta, radius;
+    private static final Map<SphericCoordinate, SphericCoordinate> existingCoordinatesMap = new HashMap<>();
 
     /**
      * @param phi    latitude
@@ -19,7 +22,7 @@ public class SphericCoordinate extends AbstractCoordinate {
      * @methodtype constructor
      */
 
-    public SphericCoordinate(double phi, double theta, double radius) {
+    private SphericCoordinate(double phi, double theta, double radius) {
         /*
          * preconditions
          */
@@ -49,6 +52,17 @@ public class SphericCoordinate extends AbstractCoordinate {
         this.radius = radius;
 
         doAssertClassInvariants();
+    }
+
+    public static SphericCoordinate getOrCreateCoordinate(double phi, double theta, double radius) {
+        SphericCoordinate sphericCoordinate = new SphericCoordinate(phi, theta, radius);
+        SphericCoordinate exCoord = existingCoordinatesMap.get(sphericCoordinate);
+        if (exCoord != null) {
+            return exCoord;
+        } else {
+            existingCoordinatesMap.put(sphericCoordinate, sphericCoordinate);
+            return sphericCoordinate;
+        }
     }
 
     /**

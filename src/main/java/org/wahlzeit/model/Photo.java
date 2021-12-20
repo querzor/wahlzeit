@@ -162,7 +162,7 @@ public class Photo extends DataObject {
 		Object lon = rset.getObject("y_coordinate");
 		Object radius = rset.getObject("z_coordinate");
 		if (lat != null && lon != null && radius != null) {
-			loc = new Location(new SphericCoordinate((double) lat, (double) lon, (double) radius));
+			loc = new Location(SphericCoordinate.getOrCreateCoordinate((double) lat, (double) lon, (double) radius));
 		}
 	}
 

@@ -16,12 +16,12 @@ public class SphericCoordinateTest {
     @Test
     public void invalidArguments() {
         exception.expect(java.lang.IllegalArgumentException.class);
-        SphericCoordinate coordinate1 = new SphericCoordinate(Double.POSITIVE_INFINITY, 1, 1);
+        SphericCoordinate coordinate1 = SphericCoordinate.getOrCreateCoordinate(Double.POSITIVE_INFINITY, 1, 1);
     }
 
     @Test
     public void instantiateCoordinate() {
-        SphericCoordinate coordinate = new SphericCoordinate(2, 4, 5);
+        SphericCoordinate coordinate = SphericCoordinate.getOrCreateCoordinate(2, 4, 5);
         assertEquals(2, coordinate.getPhi(), 0);
         assertEquals(-2.2831853071795862, coordinate.getTheta(), 0);
         assertEquals(5, coordinate.getRadius(), 0);
@@ -29,7 +29,7 @@ public class SphericCoordinateTest {
 
     @Test
     public void sphericAsSpheric() {
-        SphericCoordinate coordinate1 = new SphericCoordinate(2, 5, 10);
+        SphericCoordinate coordinate1 = SphericCoordinate.getOrCreateCoordinate(2, 5, 10);
         SphericCoordinate coordinate2 = coordinate1.asSphericCoordinate();
         assertEquals(2, coordinate2.getPhi(), 0);
         assertEquals(-1.2831853071795862, coordinate2.getTheta(), 0);
@@ -46,7 +46,7 @@ public class SphericCoordinateTest {
                 {{-7.123, -8.123, -9.123}, {2.2720488408661, -2.2906973347579, 14.14034607073}}};
 
         for (double[][] testArray : testData) {
-            SphericCoordinate coordinate1 = new SphericCoordinate(testArray[1][0], testArray[1][1], testArray[1][2]);
+            SphericCoordinate coordinate1 = SphericCoordinate.getOrCreateCoordinate(testArray[1][0], testArray[1][1], testArray[1][2]);
             CartesianCoordinate coordinate2 = coordinate1.asCartesianCoordinate();
             assertEquals(testArray[0][0], coordinate2.getX(), 0.0001);
             assertEquals(testArray[0][1], coordinate2.getY(), 0.0001);
@@ -56,8 +56,8 @@ public class SphericCoordinateTest {
 
     @Test
     public void convertOriginToCartesian() {
-        CartesianCoordinate coordinate1 = new SphericCoordinate(0, 0, 0).asCartesianCoordinate();
-        CartesianCoordinate coordinate2 = new SphericCoordinate(1, 2, 0).asCartesianCoordinate();
+        CartesianCoordinate coordinate1 = SphericCoordinate.getOrCreateCoordinate(0, 0, 0).asCartesianCoordinate();
+        CartesianCoordinate coordinate2 = SphericCoordinate.getOrCreateCoordinate(1, 2, 0).asCartesianCoordinate();
 
         assertEquals(0, coordinate1.getX(), 0.0001);
         assertEquals(0, coordinate1.getY(), 0.0001);
@@ -69,12 +69,12 @@ public class SphericCoordinateTest {
 
     @Test
     public void convertCoordinateOnAxis() {
-        SphericCoordinate coordinate1 = new SphericCoordinate(1.5707963267949, 0, 5);
-        SphericCoordinate coordinate2 = new SphericCoordinate(1.5707963267949, 0.78539816339745, 7.0710678118655);
-        SphericCoordinate coordinate3 = new SphericCoordinate(1.5707963267949, 1.5707963267949, 5);
-        SphericCoordinate coordinate4 = new SphericCoordinate(1.5707963267949, -1.5707963267949, 5);
-        SphericCoordinate coordinate5 = new SphericCoordinate(0, 0, 5);
-        SphericCoordinate coordinate6 = new SphericCoordinate(Math.PI, 0, 5);
+        SphericCoordinate coordinate1 = SphericCoordinate.getOrCreateCoordinate(1.5707963267949, 0, 5);
+        SphericCoordinate coordinate2 = SphericCoordinate.getOrCreateCoordinate(1.5707963267949, 0.78539816339745, 7.0710678118655);
+        SphericCoordinate coordinate3 = SphericCoordinate.getOrCreateCoordinate(1.5707963267949, 1.5707963267949, 5);
+        SphericCoordinate coordinate4 = SphericCoordinate.getOrCreateCoordinate(1.5707963267949, -1.5707963267949, 5);
+        SphericCoordinate coordinate5 = SphericCoordinate.getOrCreateCoordinate(0, 0, 5);
+        SphericCoordinate coordinate6 = SphericCoordinate.getOrCreateCoordinate(Math.PI, 0, 5);
 
         SphericCoordinate[] testData = {coordinate1, coordinate2, coordinate3, coordinate4, coordinate5, coordinate6};
         int[][] testDataCartesian = {{5, 0, 0}, {5, 5, 0}, {0, 5, 0}, {0, -5, 0}, {0, 0, 5}, {0, 0, -5}};
