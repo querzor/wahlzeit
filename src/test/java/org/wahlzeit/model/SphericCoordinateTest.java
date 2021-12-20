@@ -7,6 +7,15 @@ import org.junit.rules.ExpectedException;
 import static org.junit.Assert.*;
 
 public class SphericCoordinateTest {
+    @Test
+    public void testValueTypeProperties() {
+        SphericCoordinate coordinate1 = SphericCoordinate.getOrCreateCoordinate(2, 4, 5);
+        SphericCoordinate coordinate2 = SphericCoordinate.getOrCreateCoordinate(2, 4.0000009, 5);
+        SphericCoordinate coordinate3 = SphericCoordinate.getOrCreateCoordinate(2, 4.9, 5);
+        assertSame(coordinate1, coordinate2);
+        assertNotSame(coordinate1, coordinate3);
+    }
+
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
