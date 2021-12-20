@@ -4,11 +4,16 @@ package org.wahlzeit.model;
 just a cartesian coordinate system
  */
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CartesianCoordinate extends AbstractCoordinate {
 
     private final double x, y, z;
+    private static final Map<CartesianCoordinate, CartesianCoordinate> existingCoordinatesMap = new HashMap<>();
 
-    public CartesianCoordinate(double x, double y, double z) {
+
+    private CartesianCoordinate(double x, double y, double z) {
         assertValidDouble(x);
         assertValidDouble(y);
         assertValidDouble(z);
@@ -18,6 +23,17 @@ public class CartesianCoordinate extends AbstractCoordinate {
         this.z = z;
 
         doAssertClassInvariants();
+    }
+
+    public static CartesianCoordinate getOrCreateCoordinate(double x, double y, double z) {
+        CartesianCoordinate cartesianCoordinate = new CartesianCoordinate(x, y, z);
+        CartesianCoordinate exCoord = existingCoordinatesMap.get(cartesianCoordinate);
+        if (exCoord != null) {
+            return exCoord;
+        } else {
+            existingCoordinatesMap.put(cartesianCoordinate, cartesianCoordinate);
+            return cartesianCoordinate;
+        }
     }
 
     /**

@@ -95,7 +95,7 @@ public class SphericCoordinate extends AbstractCoordinate {
         double x = radius * Math.sin(phi) * Math.cos(theta);
         double y = radius * Math.sin(phi) * Math.sin(theta);
         double z = radius * Math.cos(phi);
-        return new CartesianCoordinate(x, y, z);
+        return CartesianCoordinate.getOrCreateCoordinate(x, y, z);
     }
 
     @Override

@@ -8,7 +8,7 @@ public class CartesianCoordinateTest {
 
     @Test
     public void instantiateCoordinate() {
-        CartesianCoordinate coordinate = new CartesianCoordinate(2, -3, 4);
+        CartesianCoordinate coordinate = CartesianCoordinate.getOrCreateCoordinate(2, -3, 4);
         assertEquals(2, coordinate.getX(), 0);
         assertEquals(-3, coordinate.getY(), 0);
         assertEquals(4, coordinate.getZ(), 0);
@@ -16,7 +16,7 @@ public class CartesianCoordinateTest {
 
     @Test
     public void cartesianAsCartesian() {
-        CartesianCoordinate coordinate1 = new CartesianCoordinate(-2, 3, -4);
+        CartesianCoordinate coordinate1 = CartesianCoordinate.getOrCreateCoordinate(-2, 3, -4);
         CartesianCoordinate coordinate2 = coordinate1.asCartesianCoordinate();
         assertEquals(-2, coordinate2.getX(), 0);
         assertEquals(3, coordinate2.getY(), 0);
@@ -32,7 +32,7 @@ public class CartesianCoordinateTest {
                 {{-7.123, -8.123, -9.123}, {2.2720488408661, -2.2906973347579, 14.14034607073}}};
 
         for (double[][] testArray : testData) {
-            CartesianCoordinate coordinate1 = new CartesianCoordinate(testArray[0][0], testArray[0][1], testArray[0][2]);
+            CartesianCoordinate coordinate1 = CartesianCoordinate.getOrCreateCoordinate(testArray[0][0], testArray[0][1], testArray[0][2]);
             SphericCoordinate coordinate2 = coordinate1.asSphericCoordinate();
             assertEquals(testArray[1][0], coordinate2.getPhi(), 0.0001);
             assertEquals(testArray[1][1], coordinate2.getTheta(), 0.0001);
@@ -42,7 +42,7 @@ public class CartesianCoordinateTest {
 
     @Test
     public void cartesianAsSphericOrigin() {
-        CartesianCoordinate coordinate1 = new CartesianCoordinate(0, 0, 0);
+        CartesianCoordinate coordinate1 = CartesianCoordinate.getOrCreateCoordinate(0, 0, 0);
         SphericCoordinate coordinate2 = coordinate1.asSphericCoordinate();
         assertEquals(0, coordinate2.getRadius(), 0.0001);
     }
