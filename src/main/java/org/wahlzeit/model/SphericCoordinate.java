@@ -54,7 +54,7 @@ public class SphericCoordinate extends AbstractCoordinate {
         doAssertClassInvariants();
     }
 
-    public static SphericCoordinate getOrCreateCoordinate(double phi, double theta, double radius) {
+    public static SphericCoordinate ensureSphericCoordinate(double phi, double theta, double radius) {
         SphericCoordinate sphericCoordinate = new SphericCoordinate(phi, theta, radius);
         SphericCoordinate exCoord = existingCoordinatesMap.get(sphericCoordinate);
         if (exCoord != null) {

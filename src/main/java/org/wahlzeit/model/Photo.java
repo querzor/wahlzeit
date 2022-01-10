@@ -162,7 +162,7 @@ public class Photo extends DataObject {
 		Object lon = rset.getObject("y_coordinate");
 		Object radius = rset.getObject("z_coordinate");
 		if (lat != null && lon != null && radius != null) {
-			loc = new Location(SphericCoordinate.getOrCreateCoordinate((double) lat, (double) lon, (double) radius));
+			loc = new Location(SphericCoordinate.ensureSphericCoordinate((double) lat, (double) lon, (double) radius));
 		}
 	}
 
@@ -186,9 +186,9 @@ public class Photo extends DataObject {
 		rset.updateLong("creation_time", creationTime);
 
 		if (loc != null) {
-			rset.updateDouble("x_coordinate", loc.coordinate.getPhi());
-			rset.updateDouble("y_coordinate", loc.coordinate.getTheta());
-			rset.updateDouble("z_coordinate", loc.coordinate.getRadius());
+			rset.updateDouble("x_coordinate", loc.getCoordinate().asSphericCoordinate().getPhi());
+			rset.updateDouble("y_coordinate", loc.getCoordinate().asSphericCoordinate().getTheta());
+			rset.updateDouble("z_coordinate", loc.getCoordinate().asSphericCoordinate().getRadius());
 		}
 	}
 

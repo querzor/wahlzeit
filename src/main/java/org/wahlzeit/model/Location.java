@@ -1,22 +1,50 @@
 package org.wahlzeit.model;
 
 public class Location {
-    SphericCoordinate coordinate;
+    private Coordinate coordinate;
 
+
+    /**
+     * @methodtype constructor
+     */
     public Location(Coordinate coordinate) {
-        this.coordinate = coordinate.asSphericCoordinate();
+        if (coordinate == null) {
+            throw new IllegalArgumentException("coordinate was null");
+        }
+        this.coordinate = coordinate;
     }
 
-    public boolean equals(Location location) {
-        if (location == null) return false;
-        return this.coordinate.equals(location.coordinate);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Location)) return false;
+
+        Location location = (Location) o;
+
+        return getCoordinate().equals(location.getCoordinate());
     }
 
-    public SphericCoordinate getCoordinate() {
+    @Override
+    public int hashCode() {
+        return getCoordinate().hashCode();
+    }
+
+    /**
+     * @methodtype get
+     */
+    public Coordinate getCoordinate() {
         return coordinate;
     }
 
-    public void setCoordinate(SphericCoordinate coordinate) {
+    /**
+     * @methodtype set
+     */
+    public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
+        doAssertClassInvariants();
+    }
+
+    private void doAssertClassInvariants() throws IllegalStateException {
+        if (coordinate == null) throw new IllegalStateException("coordinate is null");
     }
 }

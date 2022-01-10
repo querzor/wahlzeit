@@ -7,6 +7,10 @@ just a cartesian coordinate system
 import java.util.HashMap;
 import java.util.Map;
 
+@PatternInstance(
+        patternName = "Value Object",
+        participants = {"CartesianCoordinate", }
+)
 public class CartesianCoordinate extends AbstractCoordinate {
 
     private final double x, y, z;
@@ -72,7 +76,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
         double theta = Math.atan2(y, x);
         double radius = Math.sqrt(x * x + y * y + z * z);
         double phi = (radius == 0) ? 0 : Math.acos(z / radius);
-        return SphericCoordinate.getOrCreateCoordinate(phi, theta, radius);
+        return SphericCoordinate.ensureSphericCoordinate(phi, theta, radius);
     }
 
     void doAssertClassInvariants() throws IllegalStateException {
