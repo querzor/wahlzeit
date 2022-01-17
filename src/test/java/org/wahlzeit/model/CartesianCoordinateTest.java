@@ -14,14 +14,14 @@ public class CartesianCoordinateTest {
         assertEquals(4, coordinate.getZ(), 0);
     }
 
-    @Test
+   /* @Test
     public void cartesianAsCartesian() {
         CartesianCoordinate coordinate1 = CartesianCoordinate.getOrCreateCoordinate(-2, 3, -4);
         CartesianCoordinate coordinate2 = coordinate1.asCartesianCoordinate();
         assertEquals(-2, coordinate2.getX(), 0);
         assertEquals(3, coordinate2.getY(), 0);
         assertEquals(-4, coordinate2.getZ(), 0);
-    }
+    }*/
 
     @Test
     public void cartesianAsSpheric() {
